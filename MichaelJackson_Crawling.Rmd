@@ -1,0 +1,68 @@
+---
+title: "마이클 잭슨 뉴스 크롤링(기초)"
+author: "류경준"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    highlight: textmate
+    theme: default
+    toc: true
+    toc_float: true
+    code_folding: show
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE}
+library(tidyverse)
+library(rvest)
+library(wordcloud2)
+
+# library(KoNLP)
+```
+
+
+```{r}
+news_url <- "https://entertain.naver.com/read?oid=057&aid=0001328758"
+```
+
+## case 1
+
+기초중의 기초
+
+```{r}
+news_html <- read_html(news_url)
+news_node <- html_nodes(news_html, "#articeBody.article_body.font1.size3")
+news_text <- html_text(news_node)
+news_text <- str_replace_all(news_text,"\\W"," ")
+
+# news_text <- gsub("\t","",news_text)
+# news_text <- gsub("\n","",news_text)
+# 
+# news_text <- str_replace_all(news_text, "\t","")
+# news_text <- str_replace_all(news_text, "\n","")
+
+# news_text %>% 
+#   str_replace_all("\t","") %>% 
+#   str_replace_all("\n","")
+```
+
+## case 2
+
+tidyverse 패키지를 이용하여 조금 더 깔끔하게 작업해보자. 
+
+```{r}
+news_text <- news_url %>%
+  read_html() %>% 
+  html_nodes("#articeBody.article_body.font1.size3") %>% 
+  html_text() %>% 
+  str_replace_all("\\W"," ")
+```
+
+
+
+
+
